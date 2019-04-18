@@ -240,8 +240,8 @@ namespace aruco
         else toRemove[i]=true;
       }
     }
-    //remove the markers marker
-    removeElements ( detectedMarkers, toRemove );
+    // Allow to publish duplicated markers for one ID
+    //removeElements ( detectedMarkers, toRemove );
 
     ///detect the position of detected markers if desired
     if ( camMatrix.rows!=0  && markerSizeMeters>0 )
