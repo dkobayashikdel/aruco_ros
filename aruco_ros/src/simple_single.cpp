@@ -75,6 +75,10 @@ private:
   double marker_size;
   int marker_id;
   bool rotate_marker_axis_;
+  double min_marker_size_;
+  double max_marker_size_;
+  double threshold_param_1_;
+  double threshold_param_2_;
 
   ros::NodeHandle nh;
   image_transport::ImageTransport it;
@@ -105,9 +109,17 @@ public:
     //Print parameters of aruco marker detector:
     ROS_INFO_STREAM("Corner refinement method: " << mDetector.getCornerRefinementMethod());
     ROS_INFO_STREAM("Threshold method: " << mDetector.getThresholdMethod());
+
+    nh.param<double>("threshold_param_1", threshold_param_1_, 7);
+    nh.param<double>("threshold_param_2", threshold_param_2_, 7);
+    mDetector.setThresholdParams(threshold_param_1_, threshold_param_2_);
     double th1, th2;
     mDetector.getThresholdParams(th1, th2);
     ROS_INFO_STREAM("Threshold method: " << " th1: " << th1 << " th2: " << th2);
+
+    nh.param<double>("min_marker_size", min_marker_size_, 0.015);
+    nh.param<double>("max_marker_size", max_marker_size_, 0.08);
+    mDetector.setMinMaxSize(min_marker_size_, max_marker_size_);
     float mins, maxs;
     mDetector.getMinMaxSize(mins, maxs);
     ROS_INFO_STREAM("Marker size min: " << mins << "  max: " << maxs);
