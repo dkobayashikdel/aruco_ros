@@ -104,9 +104,9 @@ namespace aruco
  *
  *
  ************************************/
-  void MarkerDetector::detect ( const  cv::Mat &input,std::vector<Marker> &detectedMarkers, CameraParameters camParams ,float markerSizeMeters ,bool setYPerpendicular) throw ( cv::Exception )
+void MarkerDetector::detect ( const  cv::Mat &input,std::vector<Marker> &detectedMarkers, CameraParameters camParams ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication) throw ( cv::Exception )
   {
-    detect ( input, detectedMarkers,camParams.CameraMatrix ,camParams.Distorsion,  markerSizeMeters ,setYPerpendicular);
+    detect ( input, detectedMarkers,camParams.CameraMatrix ,camParams.Distorsion,  markerSizeMeters ,setYPerpendicular, allowMarkerDuplication);
   }
 
 
@@ -116,7 +116,7 @@ namespace aruco
  *
  *
  ************************************/
-  void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMarkers,Mat camMatrix ,Mat distCoeff ,float markerSizeMeters ,bool setYPerpendicular) throw ( cv::Exception )
+void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMarkers,Mat camMatrix ,Mat distCoeff ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication) throw ( cv::Exception )
   {
 
 
@@ -240,8 +240,11 @@ namespace aruco
         else toRemove[i]=true;
       }
     }
-    //remove the markers marker
-    removeElements ( detectedMarkers, toRemove );
+    if (not allowMarkerDuplication)
+    {      
+      // Remove the duplicated markers
+      removeElements ( detectedMarkers, toRemove );
+    }
 
     ///detect the position of detected markers if desired
     if ( camMatrix.rows!=0  && markerSizeMeters>0 )

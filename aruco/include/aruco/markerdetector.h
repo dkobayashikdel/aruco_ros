@@ -81,7 +81,7 @@ public:
      * @param markerSizeMeters size of the marker sides expressed in meters
      * @param setYPerpendicular If set the Y axis will be perpendicular to the surface. Otherwise, it will be the Z axis
      */
-    void detect(const cv::Mat &input, std::vector<Marker> &detectedMarkers, cv::Mat camMatrix=cv::Mat(), cv::Mat distCoeff=cv::Mat(), float markerSizeMeters=-1, bool setYPerpendicular=true) throw (cv::Exception);
+    void detect(const cv::Mat &input, std::vector<Marker> &detectedMarkers, cv::Mat camMatrix=cv::Mat(), cv::Mat distCoeff=cv::Mat(), float markerSizeMeters=-1, bool setYPerpendicular=true, bool allowMarkerDuplication=false) throw (cv::Exception);
     /**Detects the markers in the image passed
      *
      * If you provide information about the camera parameters and the size of the marker, then, the extrinsics of the markers are detected
@@ -92,7 +92,7 @@ public:
      * @param markerSizeMeters size of the marker sides expressed in meters
      * @param setYPerpendicular If set the Y axis will be perpendicular to the surface. Otherwise, it will be the Z axis
      */
-    void detect(const cv::Mat &input, std::vector<Marker> &detectedMarkers, CameraParameters camParams, float markerSizeMeters=-1, bool setYPerpendicular=true) throw (cv::Exception);
+    void detect(const cv::Mat &input, std::vector<Marker> &detectedMarkers, CameraParameters camParams, float markerSizeMeters=-1, bool setYPerpendicular=true, bool allowMarkerDuplication=false) throw (cv::Exception);
 
     /**This set the type of thresholding methods available
      */

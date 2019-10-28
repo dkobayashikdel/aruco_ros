@@ -65,6 +65,7 @@ private:
   double max_marker_size_;
   double threshold_param_1_;
   double threshold_param_2_;
+  bool allow_marker_duplication_;
 
   // ROS pub-sub
   ros::NodeHandle nh_;
@@ -105,7 +106,7 @@ public:
       nh_.param<double>("max_marker_size", max_marker_size_, 0.08);
       nh_.param<double>("threshold_param_1", threshold_param_1_, 7);
       nh_.param<double>("threshold_param_2", threshold_param_2_, 7);
-      
+      nh_.param<bool>("allow_marker_duplication", allow_marker_duplication_, false);
       ROS_ASSERT(not (camera_frame_.empty() and not reference_frame_.empty()));
       if(reference_frame_.empty())
         reference_frame_ = camera_frame_;
@@ -217,7 +218,7 @@ public:
         markers_.clear();
 
         //Ok, let's detect
-        mDetector_.detect(inImage_, markers_, camParam_, marker_size_, false);
+        mDetector_.detect(inImage_, markers_, camParam_, marker_size_, false, allow_marker_duplication_);
 
         // marker array publish
         if(publishMarkers)
