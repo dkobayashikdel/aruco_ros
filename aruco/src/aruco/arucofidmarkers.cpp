@@ -405,16 +405,30 @@ namespace aruco {
   int FiducidalMarkers::detect(const Mat &in,int &nRotations)
   {
     assert(in.rows==in.cols);
-    Mat grey;
+    Mat grey, bin_p, bin_n;
     if ( in.type()==CV_8UC1) grey=in;
     else cv::cvtColor(in,grey,CV_BGR2GRAY);
     //threshold image
-    threshold(grey, grey,125, 255, THRESH_BINARY|THRESH_OTSU);
+    threshold(grey, bin_p, 125, 255, THRESH_BINARY|THRESH_OTSU);
+    threshold(grey, bin_n, 125, 255, THRESH_BINARY_INV|THRESH_OTSU);
 
     //now, analyze the interior in order to get the id
     //try first with the big ones
 
-    return analyzeMarkerImage(grey,nRotations);;
+    // Check positive binary image
+    int p_result = analyzeMarkerImage(bin_p,nRotations);
+    // Check negative binary image
+    int n_result = analyzeMarkerImage(bin_n,nRotations);
+
+    if (p_result >= 0)
+    {
+      return p_result;
+    }
+    if (n_result >= 0)
+    {
+      return n_result;
+    }
+    return -1;
     //too many false positives
     /*    int id=analyzeMarkerImage(grey,nRotations);
         if (id!=-1) return id;
