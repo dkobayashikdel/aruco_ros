@@ -41,7 +41,7 @@ namespace aruco {
  ************************************/
   /**
 */
-  Mat FiducidalMarkers::createMarkerImage(int id,int size) throw (cv::Exception)
+  Mat FiducidalMarkers::createMarkerImage(int id,int size)
   {
     Mat marker(size,size, CV_8UC1);
     marker.setTo(Scalar(0));
@@ -66,7 +66,7 @@ namespace aruco {
   /**
  *
  */
-  cv::Mat FiducidalMarkers::getMarkerMat(int id) throw (cv::Exception)
+  cv::Mat FiducidalMarkers::getMarkerMat(int id)
   {
     Mat marker(5,5, CV_8UC1);
     marker.setTo(Scalar(0));
@@ -92,7 +92,7 @@ namespace aruco {
  *
  ************************************/
 
-  cv::Mat  FiducidalMarkers::createBoardImage( Size gridSize,int MarkerSize,int MarkerDistance,  BoardConfiguration& TInfo  ,vector<int> *excludedIds) throw (cv::Exception)
+  cv::Mat  FiducidalMarkers::createBoardImage( Size gridSize,int MarkerSize,int MarkerDistance,  BoardConfiguration& TInfo  ,vector<int> *excludedIds)
   {
 
 
@@ -138,7 +138,7 @@ namespace aruco {
  *
  *
  ************************************/
-  cv::Mat  FiducidalMarkers::createBoardImage_ChessBoard( Size gridSize,int MarkerSize,  BoardConfiguration& TInfo ,bool centerData ,vector<int> *excludedIds) throw (cv::Exception)
+  cv::Mat  FiducidalMarkers::createBoardImage_ChessBoard( Size gridSize,int MarkerSize,  BoardConfiguration& TInfo ,bool centerData ,vector<int> *excludedIds)
   {
 
 
@@ -198,7 +198,7 @@ namespace aruco {
  *
  *
  ************************************/
-  cv::Mat  FiducidalMarkers::createBoardImage_Frame( Size gridSize,int MarkerSize,int MarkerDistance, BoardConfiguration& TInfo ,bool centerData,vector<int> *excludedIds ) throw (cv::Exception)
+  cv::Mat  FiducidalMarkers::createBoardImage_Frame( Size gridSize,int MarkerSize,int MarkerDistance, BoardConfiguration& TInfo ,bool centerData,vector<int> *excludedIds )
   {
     srand(cv::getTickCount());
     int nMarkers=2*gridSize.height*2*gridSize.width;
@@ -437,7 +437,7 @@ namespace aruco {
         return -1;*/
   }
 
-  vector<int> FiducidalMarkers::getListOfValidMarkersIds_random(int nMarkers,vector<int> *excluded) throw (cv::Exception)
+  vector<int> FiducidalMarkers::getListOfValidMarkersIds_random(int nMarkers,vector<int> *excluded)
   {
 
     if (excluded!=NULL)

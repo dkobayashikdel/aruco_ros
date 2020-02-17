@@ -104,7 +104,7 @@ namespace aruco
  *
  *
  ************************************/
-void MarkerDetector::detect ( const  cv::Mat &input,std::vector<Marker> &detectedMarkers, CameraParameters camParams ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication) throw ( cv::Exception )
+void MarkerDetector::detect ( const  cv::Mat &input,std::vector<Marker> &detectedMarkers, CameraParameters camParams ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication)
   {
     detect ( input, detectedMarkers,camParams.CameraMatrix ,camParams.Distorsion,  markerSizeMeters ,setYPerpendicular, allowMarkerDuplication);
   }
@@ -116,7 +116,7 @@ void MarkerDetector::detect ( const  cv::Mat &input,std::vector<Marker> &detecte
  *
  *
  ************************************/
-void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMarkers,Mat camMatrix ,Mat distCoeff ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication) throw ( cv::Exception )
+void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMarkers,Mat camMatrix ,Mat distCoeff ,float markerSizeMeters ,bool setYPerpendicular, bool allowMarkerDuplication)
   {
 
 
@@ -411,7 +411,7 @@ void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMark
  *
  *
  ************************************/
-  void MarkerDetector::thresHold ( int method,const Mat &grey_m,Mat &out,double param1,double param2 ) throw ( cv::Exception )
+  void MarkerDetector::thresHold ( int method,const Mat &grey_m,Mat &out,double param1,double param2 )
   {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wfloat-equal"
@@ -454,7 +454,7 @@ void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMark
  *
  *
  ************************************/
-  bool MarkerDetector::warp ( Mat &in,Mat &out,Size size, vector<Point2f> points ) throw ( cv::Exception )
+  bool MarkerDetector::warp ( Mat &in,Mat &out,Size size, vector<Point2f> points )
   {
 
     if ( points.size() !=4 )    throw cv::Exception ( 9001,"point.size()!=4","MarkerDetector::warp",__FILE__,__LINE__ );
@@ -557,7 +557,7 @@ void MarkerDetector::detect ( const  cv::Mat &input,vector<Marker> &detectedMark
  *
  *
  ************************************/
-  bool MarkerDetector::warp_cylinder ( Mat &in,Mat &out,Size size, MarkerCandidate& mcand ) throw ( cv::Exception )
+  bool MarkerDetector::warp_cylinder ( Mat &in,Mat &out,Size size, MarkerCandidate& mcand )
   {
 
     if ( mcand.size() !=4 )    throw cv::Exception ( 9001,"point.size()!=4","MarkerDetector::warp",__FILE__,__LINE__ );
@@ -990,7 +990,7 @@ void MarkerDetector::warpPerspective(const cv::Mat &in,cv::Mat & out, const cv::
  ************************************/
 
   void MarkerDetector::glGetProjectionMatrix ( CameraParameters &  CamMatrix,cv::Size orgImgSize, cv::Size size,double proj_matrix[16],double gnear,double gfar,bool invert )
-  throw ( cv::Exception )
+ 
   {
     cerr<<"MarkerDetector::glGetProjectionMatrix . This a deprecated function. Use CameraParameters::glGetProjectionMatrix instead. "<<__FILE__<<" "<<__LINE__<<endl;
     CamMatrix.glGetProjectionMatrix ( orgImgSize,size,proj_matrix,gnear,gfar,invert );
@@ -1003,7 +1003,7 @@ void MarkerDetector::warpPerspective(const cv::Mat &in,cv::Mat & out, const cv::
 *
 ************************************/
 
-  void MarkerDetector::setMinMaxSize(float min ,float max )throw(cv::Exception)
+  void MarkerDetector::setMinMaxSize(float min ,float max )
   {
     if (min<=0 || min>1) throw cv::Exception(1," min parameter out of range","MarkerDetector::setMinMaxSize",__FILE__,__LINE__);
     if (max<=0 || max>1) throw cv::Exception(1," max parameter out of range","MarkerDetector::setMinMaxSize",__FILE__,__LINE__);
