@@ -69,6 +69,7 @@ private:
 
   // ROS pub-sub
   ros::NodeHandle nh_;
+  ros::NodeHandle nh_priv_;
   image_transport::ImageTransport it_;
   image_transport::Subscriber image_sub_;
 
@@ -86,27 +87,28 @@ private:
 
 public:
   ArucoMarkerPublisher()
-    : nh_("~")
+    : nh_("")
+    , nh_priv_("~")
     , it_(nh_)
     , useCamInfo_(true)
   {
-    image_sub_ = it_.subscribe("/image", 1, &ArucoMarkerPublisher::image_callback, this);
+    image_sub_ = it_.subscribe("image", 1, &ArucoMarkerPublisher::image_callback, this);
 
-    nh_.param<bool>("use_camera_info", useCamInfo_, true);
+    nh_priv_.param<bool>("use_camera_info", useCamInfo_, true);
     if(useCamInfo_)
     {
-      sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("/camera_info", nh_);//, 10.0);
+      sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("camera_info", nh_);//, 10.0);
       camParam_ = aruco_ros::rosCameraInfo2ArucoCamParams(*msg, useRectifiedImages_);
-      nh_.param<double>("marker_size", marker_size_, 0.05);
-      nh_.param<bool>("image_is_rectified", useRectifiedImages_, true);
-      nh_.param<std::string>("reference_frame", reference_frame_, "");
-      nh_.param<std::string>("camera_frame", camera_frame_, "");
-      nh_.param<bool>("rotate_marker_axis", rotate_marker_axis_, true);
-      nh_.param<double>("min_marker_size", min_marker_size_, 0.015);
-      nh_.param<double>("max_marker_size", max_marker_size_, 0.08);
-      nh_.param<double>("threshold_param_1", threshold_param_1_, 7);
-      nh_.param<double>("threshold_param_2", threshold_param_2_, 7);
-      nh_.param<bool>("allow_marker_duplication", allow_marker_duplication_, false);
+      nh_priv_.param<double>("marker_size", marker_size_, 0.05);
+      nh_priv_.param<bool>("image_is_rectified", useRectifiedImages_, true);
+      nh_priv_.param<std::string>("reference_frame", reference_frame_, "");
+      nh_priv_.param<std::string>("camera_frame", camera_frame_, "");
+      nh_priv_.param<bool>("rotate_marker_axis", rotate_marker_axis_, true);
+      nh_priv_.param<double>("min_marker_size", min_marker_size_, 0.015);
+      nh_priv_.param<double>("max_marker_size", max_marker_size_, 0.08);
+      nh_priv_.param<double>("threshold_param_1", threshold_param_1_, 7);
+      nh_priv_.param<double>("threshold_param_2", threshold_param_2_, 7);
+      nh_priv_.param<bool>("allow_marker_duplication", allow_marker_duplication_, false);
       ROS_ASSERT(not (camera_frame_.empty() and not reference_frame_.empty()));
       if(reference_frame_.empty())
         reference_frame_ = camera_frame_;
@@ -117,7 +119,7 @@ public:
     }
 
     std::string refinementMethod;
-    nh_.param<std::string>("corner_refinement", refinementMethod, "LINES");
+    nh_priv_.param<std::string>("corner_refinement", refinementMethod, "LINES");
     if ( refinementMethod == "SUBPIX" )
       mDetector_.setCornerRefinementMethod(aruco::MarkerDetector::SUBPIX);
     else if ( refinementMethod == "HARRIS" )
@@ -130,7 +132,7 @@ public:
     ROS_INFO_STREAM("Corner refinement method: " << mDetector_.getCornerRefinementMethod());
 
     std::string thresholdMethod;
-    nh_.param<std::string>("threshold_method", thresholdMethod, "ADPT_THRES");
+    nh_priv_.param<std::string>("threshold_method", thresholdMethod, "ADPT_THRES");
     if ( thresholdMethod == "FIXED_THRES" )
       mDetector_.setThresholdMethod(aruco::MarkerDetector::FIXED_THRES);
     else if ( thresholdMethod == "ADPT_THRES" )

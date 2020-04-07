@@ -77,6 +77,7 @@ private:
   bool rotate_marker_axis_;
 
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv;
   image_transport::ImageTransport it;
   image_transport::Subscriber image_sub;
 
@@ -87,12 +88,13 @@ private:
 public:
   ArucoSimple()
     : cam_info_received(false),
-      nh("~"),
+      nh(""),
+      nh_priv("~"),
       it(nh)
   {
 
     std::string refinementMethod;
-    nh.param<std::string>("corner_refinement", refinementMethod, "LINES");
+    nh_priv.param<std::string>("corner_refinement", refinementMethod, "LINES");
     if ( refinementMethod == "SUBPIX" )
       mDetector.setCornerRefinementMethod(aruco::MarkerDetector::SUBPIX);
     else if ( refinementMethod == "HARRIS" )
@@ -115,8 +117,8 @@ public:
     
 
 
-    image_sub = it.subscribe("/image", 1, &ArucoSimple::image_callback, this);
-    cam_info_sub = nh.subscribe("/camera_info", 1, &ArucoSimple::cam_info_callback, this);
+    image_sub = it.subscribe("image", 1, &ArucoSimple::image_callback, this);
+    cam_info_sub = nh.subscribe("camera_info", 1, &ArucoSimple::cam_info_callback, this);
 
     image_pub = it.advertise("result", 1);
     debug_pub = it.advertise("debug", 1);
@@ -126,13 +128,13 @@ public:
     marker_pub = nh.advertise<visualization_msgs::Marker>("marker", 10);
     pixel_pub = nh.advertise<geometry_msgs::PointStamped>("pixel", 10);
 
-    nh.param<double>("marker_size", marker_size, 0.05);
-    nh.param<int>("marker_id", marker_id, 300);
-    nh.param<std::string>("reference_frame", reference_frame, "");
-    nh.param<std::string>("camera_frame", camera_frame, "");
-    nh.param<std::string>("marker_frame", marker_frame, "");
-    nh.param<bool>("image_is_rectified", useRectifiedImages, true);
-    nh.param<bool>("rotate_marker_axis", rotate_marker_axis_, true);
+    nh_priv.param<double>("marker_size", marker_size, 0.05);
+    nh_priv.param<int>("marker_id", marker_id, 300);
+    nh_priv.param<std::string>("reference_frame", reference_frame, "");
+    nh_priv.param<std::string>("camera_frame", camera_frame, "");
+    nh_priv.param<std::string>("marker_frame", marker_frame, "");
+    nh_priv.param<bool>("image_is_rectified", useRectifiedImages, true);
+    nh_priv.param<bool>("rotate_marker_axis", rotate_marker_axis_, true);
 
     ROS_ASSERT(camera_frame != "" && marker_frame != "");
 

@@ -237,7 +237,8 @@ void reconf_callback(aruco_ros::ArucoThresholdConfig &config, uint32_t level)
 int main(int argc,char **argv)
 {
   ros::init(argc, argv, "aruco_simple");
-  ros::NodeHandle nh("~");
+  ros::NodeHandle nh("");
+  ros::NodeHandle nh_priv("~");
   image_transport::ImageTransport it(nh);
 
   dynamic_reconfigure::Server<aruco_ros::ArucoThresholdConfig> server;
@@ -247,11 +248,11 @@ int main(int argc,char **argv)
 
   normalizeImageIllumination = false;
 
-  nh.param<bool>("image_is_rectified", useRectifiedImages, true);
+  nh_priv.param<bool>("image_is_rectified", useRectifiedImages, true);
   ROS_INFO_STREAM("Image is rectified: " << useRectifiedImages);
 
-  image_transport::Subscriber image_sub = it.subscribe("/image", 1, &image_callback);
-  cam_info_sub = nh.subscribe("/camera_info", 1, &cam_info_callback);
+  image_transport::Subscriber image_sub = it.subscribe("image", 1, &image_callback);
+  cam_info_sub = nh.subscribe("camera_info", 1, &cam_info_callback);
 
   cam_info_received = false;
   image_pub = it.advertise("result", 1);
@@ -259,16 +260,16 @@ int main(int argc,char **argv)
   pose_pub1 = nh.advertise<geometry_msgs::Pose>("pose", 100);
   pose_pub2 = nh.advertise<geometry_msgs::Pose>("pose2", 100);
 
-  nh.param<double>("marker_size", marker_size, 0.05);
-  nh.param<int>("marker_id1", marker_id1, 582);
-  nh.param<int>("marker_id2", marker_id2, 26);
-  nh.param<bool>("normalizeImage", normalizeImageIllumination, true);
-  nh.param<int>("dct_components_to_remove", dctComponentsToRemove, 2);
+  nh_priv.param<double>("marker_size", marker_size, 0.05);
+  nh_priv.param<int>("marker_id1", marker_id1, 582);
+  nh_priv.param<int>("marker_id2", marker_id2, 26);
+  nh_priv.param<bool>("normalizeImage", normalizeImageIllumination, true);
+  nh_priv.param<int>("dct_components_to_remove", dctComponentsToRemove, 2);
   if(dctComponentsToRemove == 0)
     normalizeImageIllumination = false;
-  nh.param<std::string>("parent_name", parent_name, "");
-  nh.param<std::string>("child_name1", child_name1, "");
-  nh.param<std::string>("child_name2", child_name2, "");
+  nh_priv.param<std::string>("parent_name", parent_name, "");
+  nh_priv.param<std::string>("child_name1", child_name1, "");
+  nh_priv.param<std::string>("child_name2", child_name2, "");
 
   if(parent_name == "" || child_name1 == "" || child_name2 == "")
   {
